@@ -1,0 +1,25 @@
+{
+    "name": "Eye",
+    "version": "1.0",
+    "manifest_version": 3,
+    "description": "This is an eye extension",
+    "background": {
+        "service_worker": "background.js"
+    },
+    "permissions": [
+        "notifications",
+        "storage",
+        "alarms"
+    ],
+    "icons": {
+        "128": "./alarm.jpg",
+        "48": "./alarm.jpg",
+        "32": "./alarm.jpg",
+        "16": "./alarm.jpg"
+
+    },
+    "action": {
+        "default_popup": "popup.html",
+        "default_title": "This is an eye extension"
+    }
+}
