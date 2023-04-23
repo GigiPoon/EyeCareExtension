@@ -2,16 +2,71 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eye Care</title>
-    <script defer src="popup.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="popup.css" />
+    <title>Document</title>
 </head>
 
-
 <body>
-    <button id="btn">set alarm</button>
+    <h1>Fresh</h1>
+    <h2><!-- timer --></h2>
+    <button>on/off button</button>
+    <p>Introduction copy of what this and how to best use it</p>
+    <p><span>time</span> sec</p>
+    <p>20-20-20 Rule</p>
+    <p>
+        Take a <span>20-second</span> break every <span>20 minutes</span> to look
+        at an object <span>20 feet away.</span>
+    </p>
+    <p>Learn more about eye exercises</p>
+    <form>
+        <label for="time-options">Choose the time lag</label>
+        <select name="times" id="time-options">
+            <option selected="true" disabled="disabled">
+                -- minutes --
+            </option>
+            <option value="1">1</option>
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+        </select>
+        <!-- <h1></h1> -->
+        <button type="button" id="select-time">
+            Select
+        </button>
+    </form>
+    <h2>Eye Exercises</h2>
+    <p>
+        <span>Blinking:</span> Blinking frequently can help to lubricate your eyes
+        and reduce dryness caused by staring at a screen.
+    </p>
+
+    <p>
+        <span>Eye massage:</span> Gently massage your eyelids in circular motions
+        with your fingertips to reduce tension around the eyes.
+    </p>
+    <p>
+        <span>Focus change:</span> Look at an object close to you, such as your
+        hand or a pen, and then shift your gaze to an object far away, such as a
+        tree or a building.
+    </p>
+    <!-- <div>
+			<button
+				id="btn-alarm"
+				type="button">
+				Add Notification
+			</button>
+		</div> -->
+    <script src="popup.js"></script>
 </body>
 
 </html>
+
+
+<!-- 
+ignore this    
+going from prototype to developing 
+using ___ html javascript
+figma to actual product -->
