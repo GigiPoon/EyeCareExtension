@@ -14,8 +14,12 @@ chrome.alarms.onAlarm.addListener(() => {
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     const myTime = request.time;
     if (myTime) {
+        chrome.alarms.clear('rest_eyes')
         createAlarm(Number(myTime));
     }
+    // if () {
+    //     chrome.alarms.clear('rest_eyes')
+    // }
     sendResponse({ status: true });
 });
 
@@ -25,3 +29,9 @@ function createAlarm(myTime) {
         periodInMinutes: myTime,
     });
 }
+
+// function clearAlarm() {
+//     chrome.alarms.clear('rest_eyes', {
+
+//     });
+// }

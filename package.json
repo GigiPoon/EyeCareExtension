@@ -1,0 +1,22 @@
+{
+  "name": "eye",
+  "version": "1.0.0",
+  "description": "",
+  "main": "background.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GigiPoon/EyeCareExtension.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GigiPoon/EyeCareExtension/issues"
+  },
+  "homepage": "https://github.com/GigiPoon/EyeCareExtension#readme",
+  "devDependencies": {
+    "tailwindcss": "^3.3.2"
+  }
+}

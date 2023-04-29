@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.text-xxs {
+    font-size: 0.625rem;
+}
+
+.text-20-20-20 {
+    font-size: 1.313rem;
+}
+
+.rounded-7px {
+    border-radius: 0.438rem;
+}
+
+.text-13px {
+    font-size: 0.813rem;
+}
+
+.displayflex {
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+}
