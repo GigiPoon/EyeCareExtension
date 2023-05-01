@@ -19,13 +19,13 @@ document.querySelectorAll('.settingsButton').forEach(item => {
     item.addEventListener('click', event => {
         //handle click
         if (frontpage) {
-            // if (checkBox.checked) {
-            //     checkBox.checked = false;
-            //     console.log(checkBox.checked)
-            // }
-            // else {
-            //     checkBox.checked = true;
-            // }
+            if (checkbox.checked) {
+                checkbox.checked = false;
+                console.log(checkBox.checked)
+            }
+            else {
+                checkbox.checked = true;
+            }
             if (frontpage.style.display == 'none') {
                 frontpage.style.display = 'block';
                 backpage.style.display = 'none';
@@ -53,7 +53,7 @@ selectTimeButton.addEventListener('click', () => {
         timeSecond--;
         displayTime(timeSecond);
         if (timeSecond <= 0 || timeSecond < 1) {
-            clearInterval(countDown)
+            clearInterval(countDown) //repeat/not repeat
 
             timeSecond = selectedTime * 60
         }

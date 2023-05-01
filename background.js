@@ -16,10 +16,8 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     if (myTime) {
         chrome.alarms.clear('rest_eyes')
         createAlarm(Number(myTime));
+        //delay second alarm by 20 secounds before running next
     }
-    // if () {
-    //     chrome.alarms.clear('rest_eyes')
-    // }
     sendResponse({ status: true });
 });
 
@@ -30,8 +28,3 @@ function createAlarm(myTime) {
     });
 }
 
-// function clearAlarm() {
-//     chrome.alarms.clear('rest_eyes', {
-
-//     });
-// }
