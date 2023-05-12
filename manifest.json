@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
-    "name": "Rest Notifier",
-    "description": "Rest your eyes reminder",
+    "name": "Eye Fresh",
+    "description": "20-20-20",
     "version": "1.0.0",
     "background": {
         "service_worker": "background.js"
@@ -9,9 +9,16 @@
     "permissions": [
         "notifications",
         "alarms",
-        "storage"
+        "storage",
+        "tabs"
     ],
     "action": {
         "default_popup": "popup/popup.html"
+    },
+    "icons": {
+        "16": "./images/icon16.png",
+        "32": "./images/icon32.png",
+        "48": "./images/icon48.png",
+        "128": "./images/icon128.png"
     }
 }
