@@ -27,9 +27,18 @@
         </div>
     </section>
     <div id="frontpage">
+        <!-- <label for="break-duration-select">Break Duration:</label>
+        <select id="break-duration-select">
+            <option value="10">10 seconds</option>
+            <option value="20" selected>20 seconds</option>
+            <option value="30">30 seconds</option>
+        </select> -->
+        <h2 id="timer-title" class="font-bold text-sm text-offblack uppercase mt-2">Time until break</h2>
+
+        <!-- <h2 id="delay" class="font-bold text-sm text-offblack uppercase mt-2">time until break</h2>
+        <p id="alarmtimerTwo" class="tracking-tight text-6xl text-blue mb-2">20:00</p> -->
         <h2 id="break" class="font-bold text-sm text-offblack uppercase mt-2"><!-- time until break --></h2>
-        <p id="alarmtimerTwo" class="tracking-tight text-6xl text-blue mb-2">20:00<!-- alarm and 20 seconds timer --></p>
-        <p id="alarmtimer" class="tracking-tight text-6xl text-blue mb-2">20:00<!-- alarm and 20 seconds timer --></p>
+        <p id="timer" class="tracking-tight text-6xl text-blue mb-2"><!-- alarm and 20 seconds timer --></p>
         <section class="bg-blue py-1">
             <p class="text-offwhite text-20-20-20 font-normal"><span class="font-bold">20-20-20</span> Rule</p>
         </section>
@@ -43,19 +52,25 @@
     <div id="backpage" class="hidden">
         <form class="mt-6 flex flex-col justify-center items-center mx-2">
             <div>
-                <label for="time-options" class="font-semibold text-[13px]">Take break every</label>
-                <select name="times" id="time-options" class="border border-solid border-black mb-[15px]">
-                    <option value="1">1</option>
+                <label for="duration-select" class="font-semibold text-[13px]">Take break every</label>
+                <select name="times" id="duration-select" class="border border-solid border-black mb-[15px]">
                     <option value="5">5</option>
                     <option value="10">10</option>
-                    <option value="15">15</option>
-                    <option selected="selected" value="20">20</option>
-                    <option value="25">25</option>
-                    <option value="30">30</option>
+                    <option value="15" selected>15</option>
+                    <option value="20">20</option>
                 </select>
                 <label for="time-options" class="font-semibold text-xxs">Min.</label>
             </div>
-            <button class="bg-white border border-solid border-black rounded-md settingsButton mb-3 px-2 font-semibold uppercase ml-[140px] text-xxs leading-3" type="button" id="select-time">ok</button>
+            <div>
+                <select id="sound-select">
+                    <option value="../sound/bell.mp3">Sound 1</option>
+                    <option value="./sound/bell.mp3">Sound 2</option>
+                    <option value="/sound/bell.mp3">Sound 3</option>
+                    <!-- Add more options for additional sounds -->
+                </select>
+                <audio id="audioPlayer"></audio>
+            </div>
+            <button class="bg-white border border-solid border-black rounded-md settingsButton mb-3 px-2 font-semibold uppercase ml-[140px] text-xxs leading-3" type="button" id="start-button">ok</button>
         </form>
     </div>
     
