@@ -61,17 +61,40 @@
                 </select>
                 <label for="time-options" class="font-semibold text-xxs">Min.</label>
             </div>
-            <div>
-                <select id="sound-select">
-                    <option value="../sound/bell.mp3">Sound 1</option>
-                    <option value="./sound/bell.mp3">Sound 2</option>
-                    <option value="/sound/bell.mp3">Sound 3</option>
-                    <!-- Add more options for additional sounds -->
-                </select>
-                <audio id="audioPlayer"></audio>
-            </div>
             <button class="bg-white border border-solid border-black rounded-md settingsButton mb-3 px-2 font-semibold uppercase ml-[140px] text-xxs leading-3" type="button" id="start-button">ok</button>
         </form>
+         <!--Sound Feature-->
+        <div>
+            <audio id="audio-player">
+                Your browser does not support the audio element.
+            </audio>
+            <div class="select-play-container displayflex">
+                <div class="select-song-container">
+                    <div><label for="selected-song">Select and play break time alert song</label></div>
+                    <select
+                        name="selected-song"
+                        id="selected-song"
+                        autofocus>
+                        <option value="bell">Sound 1</option>
+                        <option value="ButtonClicked">Sound 2</option>
+                        <option value="Correct">Sound 3</option>
+                        <option value="Incorrect">Sound 4</option>
+                        <option value="Correct">Sound 5</option>
+                    </select>
+                </div>
+                <div class="player-container">
+                    <button
+                        onclick="playAudio()"
+                        type="button"
+                        class="play-btn">
+                        <img
+                            src="../images/playIcon.png"
+                            alt="play btn"
+                            class="play-icon" />
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
     
     <!-- <h2>Eye Exercises</h2>
