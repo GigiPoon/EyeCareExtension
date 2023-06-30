@@ -126,3 +126,26 @@ openNewTab.addEventListener("click", () => {
         // Tab opened.
     });
 });
+
+// Sound Feature
+const audioPlayer = document.getElementById('audio-player');
+const playButton = document.querySelector('.play-btn')
+
+function playAudio() {
+	const selectedSong = document.getElementById('selected-song');
+	const newSourceTag = createSourceTag(selectedSong.value);
+	audioPlayer.appendChild(newSourceTag);
+	audioPlayer.play();
+}
+
+function createSourceTag(song) {
+	const sourceTag = document.createElement('source');
+	const newSong = `../sound/${song}.mp3`;
+	sourceTag.setAttribute('src', newSong);
+	sourceTag.setAttribute('type', 'audio/mpeg');
+	return sourceTag;
+}
+
+playButton.addEventListener('click', (event) => {
+    playAudio();
+})
