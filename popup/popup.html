@@ -15,14 +15,12 @@
 
 <body class="text-xxs text-center bg-yellow font-display w-48">
     <section class="bg-blue">     
-        <div class="displayflex px-2 pt-1">
+        <div class="flex px-2 pt-1 justify-end">
+            <p id="settingsButton" class=" settingsButton pr-0.5 font-semibold cursor-pointer text-offblack">Settings</p>
+            <img src='../images/gear.svg' alt='settings icon' class="settingsButton cursor-pointer pr-1.5">
             <img class="cursor-pointer" id="closeMenu" src='../images/x.svg' alt='letter x'>
-            <div class="displayflex">
-                <p id="settingsButton" class=" settingsButton pr-1 font-semibold cursor-pointer text-offblack">Settings</p>
-                <img src='../images/gear.svg' alt='settings icon' class="settingsButton cursor-pointer">
-            </div>
         </div>
-        <div class="displayflex px-2 pb-2 pt-1">
+        <div class="flex px-2 pb-2 pt-1">
             <img src='../images/logo.svg' alt='eye fresh title and logo'>
         </div>
     </section>
@@ -39,6 +37,9 @@
         <p id="alarmtimerTwo" class="tracking-tight text-6xl text-blue mb-2">20:00</p> -->
         <h2 id="break" class="font-bold text-sm text-offblack uppercase mt-2"><!-- time until break --></h2>
         <p id="timer" class="tracking-tight text-6xl text-blue mb-2"><!-- alarm and 20 seconds timer --></p>
+        <button id="pauseButton">Pause</button>
+        <button id="resumeButton">Start</button>
+        <button id="go-button">Reset</button>
         <section class="bg-blue py-1">
             <p class="text-offwhite text-20-20-20 font-normal"><span class="font-bold">20-20-20</span> Rule</p>
         </section>
@@ -56,20 +57,22 @@
                 <select name="times" id="duration-select" class="border border-solid border-black mb-[15px]">
                     <option value="5">5</option>
                     <option value="10">10</option>
-                    <option value="15" selected>15</option>
-                    <option value="20">20</option>
+                    <option value="15">15</option>
+                    <option value="20" selected>20</option>
+                    <option value="25">25</option>
+                    <option value="30">30</option>
                 </select>
                 <label for="time-options" class="font-semibold text-xxs">Min.</label>
             </div>
-            <div>
+            <!-- <div>
                 <select id="sound-select">
                     <option value="../sound/bell.mp3">Sound 1</option>
                     <option value="./sound/bell.mp3">Sound 2</option>
                     <option value="/sound/bell.mp3">Sound 3</option>
-                    <!-- Add more options for additional sounds -->
+                    Add more options for additional sounds 
                 </select>
                 <audio id="audioPlayer"></audio>
-            </div>
+            </div> -->
             <button class="bg-white border border-solid border-black rounded-md settingsButton mb-3 px-2 font-semibold uppercase ml-[140px] text-xxs leading-3" type="button" id="start-button">ok</button>
         </form>
     </div>

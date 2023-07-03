@@ -18,12 +18,6 @@
     font-size: 0.813rem;
 }
 
-.displayflex {
-    display:flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
 .marginauto {
     margin: 0 auto;
 }

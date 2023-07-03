@@ -526,6 +526,10 @@ video {
   margin: 35px;
 }
 
+.m-2 {
+  margin: 0.5rem;
+}
+
 .mx-2 {
   margin-left: 0.5rem;
   margin-right: 0.5rem;
@@ -669,6 +673,10 @@ video {
   align-items: center;
 }
 
+.justify-end {
+  justify-content: flex-end;
+}
+
 .justify-center {
   justify-content: center;
 }
@@ -780,6 +788,22 @@ video {
 
 .pt-\[26px\] {
   padding-top: 26px;
+}
+
+.pr-0 {
+  padding-right: 0px;
+}
+
+.pr-0\.5 {
+  padding-right: 0.125rem;
+}
+
+.pr-2 {
+  padding-right: 0.5rem;
+}
+
+.pb-1 {
+  padding-bottom: 0.25rem;
 }
 
 .text-left {
@@ -910,12 +934,6 @@ video {
 
 .text-13px {
   font-size: 0.813rem;
-}
-
-.displayflex {
-  display:flex;
-  justify-content: space-between;
-  align-items: center;
 }
 
 .marginauto {
