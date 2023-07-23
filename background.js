@@ -1,87 +1,166 @@
-let timerIntervalId = null;
-let isPaused = false;
-let pausedTime = 0;
-let startTime = 0;
+function runTimer() {
+    chrome.storage.local.get(["timer", "isRunning", "timeOption"], (res) => {
+        const TrueORFalse = res.isRunning;
+        const timeinSecondsPasted = res.timer;
+        const selectedTimefromDropDownMenu = res.timeOption;
 
-function runTimersBackToBack(durationInMinutes, breakDurationInSeconds) {
-    chrome.storage.local.set({ timerTitle: 'Time Until Break', timerColor: '#8399A8' });
+        // console.log(selectedTimefromDropDownMenu * 60, 'selectedTimefromDropDownMenu')
 
-    runTimer(durationInMinutes)
-        .then(() => {
-            chrome.storage.local.set({ timerTitle: 'Break Timer', timerColor: 'black' });
-            return runTimer(breakDurationInSeconds);
-        })
-        .then(() => {
-            chrome.storage.local.set({ timerTitle: 'Time Until Break', timerColor: null });
+        if (TrueORFalse) {
+            let timer = timeinSecondsPasted + 1;
+            let isRunning = true;
+            console.log(timer, 'timer')
+            // console.log(isRunning, 'isRunning')
 
-            chrome.storage.local.get('selectedTime', function (result) {
-                const selectedTime = result.selectedTime;
-                if (selectedTime) {
-                    runTimersBackToBack(selectedTime, breakDurationInSeconds);
-                }
+            chrome.storage.local.set({
+                timer,
             });
-        });
-}
 
-function runTimer(durationInSeconds) {
-    return new Promise(resolve => {
-        const currentTime = performance.now();
-        if (!isPaused) {
-            startTime = currentTime; // Update the start time only when not paused
-        }
-        timerIntervalId = setInterval(() => {
-            if (!isPaused) {
-                const elapsedTimeInSeconds = (performance.now() - startTime) / 1000;
-                const remainingTimeInSeconds = durationInSeconds - elapsedTimeInSeconds;
+            if (timer === 60 * selectedTimefromDropDownMenu + 1) {
+                timer = 0;
+                isRunning = false;
+                // console.log(isRunning, 'WORK TIMER')
 
-                if (remainingTimeInSeconds >= 0) {
-                    chrome.storage.local.set({ timerValue: remainingTimeInSeconds });
-                } else {
-                    clearInterval(timerIntervalId);
-                    resolve();
+                // Start the 20-second countdown timer
+                if (intervalIdOne === null) {
+                intervalIdOne = setInterval(countdownTimer, 1000);
+                    console.log(intervalIdOne, 'intervalIdOne')
+                // console.log('start')
+                }
+                else {
+                    startNextTimers()
+                    console.log('startnexttimers')
                 }
             }
-        }, 100);
+            chrome.storage.local.set({
+                isRunning,
+            });
+
+        }
     });
 }
 
+intervalIdOne = null
+
+
+//set interval for countdowntimer please
+
+function countdownTimer() {
+    chrome.storage.local.get(["isBreakRunning", 'breakTimer', 'breakDurationSelect'], (res) => {
+        const TrueORFalse = res.isBreakRunning;
+        const timeinSecondsPasted = res.breakTimer
+        // console.log(TrueORFalse, 'break timer')
+        const selectedTimefromDropDownMenu = res.breakDurationSelect
+        if (TrueORFalse === false) {
+            let breakTimer = timeinSecondsPasted + 1;
+            let isBreakRunning = false;
+            console.log(breakTimer, 'breakTimer')
+
+
+            if (breakTimer === selectedTimefromDropDownMenu + 1) {
+                breakTimer = 0;
+                isBreakRunning = true;
+                
+
+                startNextTimer();
+            }
+            chrome.storage.local.set({
+                breakTimer,
+                isBreakRunning,
+            });
+        }
+    })
+}
+
+function startNextTimer() {
+    // Start the next timer here
+    // You can reset the necessary variables and call the runTimer function again
+
+    // For example:
+    chrome.storage.local.set({
+        timer: 0,
+        isRunning: true,
+    });
+    runTimer();
+}
+
+function startNextTimers() {
+    chrome.storage.local.set({
+        breakTimer: 0,
+        isBreakRunning: false,
+    });
+    countdownTimer();
+}
+
+chrome.storage.local.get(["timer", "isRunning", "timeOption", "isBreakRunning", 'breakTimer'], (response) => {
+    let timer = 0;
+    let breakTimer = 0;
+    let timeOption = 20;
+    let isRunning = false;
+    let isBreakRunning = false;
+    let breakDurationSelect = 21;
+
+    if ("breakDurationSelect" in response) {
+        breakDurationSelect = response.breakDurationSelect;
+    }
+
+    if ("isBreakRunning" in response) {
+        isBreakRunning = response.isBreakRunning;
+    }
+
+    if ("breakTimer" in response) {
+        breakTimer = response.breakTimer;
+    }
+
+    if ("timer" in response) {
+        timer = response.timer;
+    }
+
+    if ("timeOption" in response) {
+        timeOption = response.timeOption;
+    }
+
+    if ("isRunning" in response) {
+        isRunning = response.isRunning;
+    }
+
+    chrome.storage.local.set({
+        timer,
+        timeOption,
+        isRunning,
+        breakTimer,
+        isBreakRunning,
+        breakDurationSelect
+    });
+
+    // if (isRunning) {
+    //     // If a timer is already running, start the countdown timer
+    //     countdownTimer();
+    // }
+});
+
+
+// Listen for messages from the popup
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-    if (message.action === 'pauseTimers') {
-        if (!isPaused) {
-            isPaused = true;
-            pausedTime = performance.now();
-        }
-    } else if (message.action === 'resumeTimers') {
-        if (isPaused) {
-            isPaused = false;
-            startTime += performance.now() - pausedTime;
-        }
-    } else if (message.action === 'startTimers') {
-        if (timerIntervalId) {
-            clearInterval(timerIntervalId);
+    if (message.action === 'startTimers') {
+        // Clear the existing interval if it exists
+        if (intervalId || intervalIdOne) {
+            clearInterval(intervalId); 
+            clearInterval(intervalIdOne)       
         }
 
-        const selectedTime = message.duration;
-        const breakDuration = message.breakDuration;
+        // Set the interval
+        intervalId = setInterval(runTimer, 1000);
+    }
+    if (message.action === 'breakTimers') {
+        if (intervalIdOne) {
+            clearInterval(intervalIdOne)
 
-        chrome.storage.local.set({ selectedTime: selectedTime });
+        }
+        intervalIdOne = setInterval(countdownTimer, 1000);
 
-        runTimersBackToBack(selectedTime, breakDuration);
     }
 });
-// function showAlarmNotification() {
-//     const notificationOptions = {
-//         type: 'basic',
-//         iconUrl: 'images/alarm.jpg',
-//         title: 'Alarm',
-//         message: 'Timer has finished!',
-//     };
 
-//     chrome.notifications.create('', notificationOptions, () => { });
-// }
 
-// function clearAlarm() {
-//     const alarmName = 'rest_eyes';
-//     chrome.alarms.clear(alarmName);
-// }
-
+intervalId = null;

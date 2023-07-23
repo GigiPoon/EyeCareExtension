@@ -13,56 +13,55 @@
     <title>Eye Fresh</title>
 </head>
 
-<body class="text-xxs text-center bg-yellow font-display w-48">
-    <section class="bg-blue">     
-        <div class="flex px-2 pt-1 justify-end">
-            <p id="settingsButton" class=" settingsButton pr-0.5 font-semibold cursor-pointer text-offblack">Settings</p>
-            <img src='../images/gear.svg' alt='settings icon' class="settingsButton cursor-pointer pr-1.5">
-            <img class="cursor-pointer" id="closeMenu" src='../images/x.svg' alt='letter x'>
+<body class="text-xxs text-center bg-lightgrey/20 font-display w-52">
+    <section class="bg-lightblue">     
+        <div class="flex px-2 pt-1 justify-between mb-2">
+            <div class="flex">
+                <img src='../images/cogbig.svg' alt='settings icon' class="settingsButton cursor-pointer pr-1">
+                <p id="settingsButton" class=" settingsButton pr-1.5 font-semibold cursor-pointer text-textword text-xs">Settings</p>
+            </div>
+            <img class="cursor-pointer" id="closeMenu" src='../images/xc.svg' alt='letter x'>
         </div>
         <div class="flex px-2 pb-2 pt-1">
-            <img src='../images/logo.svg' alt='eye fresh title and logo'>
+            <img src='../images/logobig.svg' alt='eye fresh title and logo'>
         </div>
     </section>
     <div id="frontpage">
-        <!-- <label for="break-duration-select">Break Duration:</label>
-        <select id="break-duration-select">
-            <option value="10">10 seconds</option>
-            <option value="20" selected>20 seconds</option>
-            <option value="30">30 seconds</option>
-        </select> -->
-        <h2 id="timer-title" class="font-bold text-sm text-offblack uppercase mt-2">Time until break</h2>
-
-        <!-- <h2 id="delay" class="font-bold text-sm text-offblack uppercase mt-2">time until break</h2>
-        <p id="alarmtimerTwo" class="tracking-tight text-6xl text-blue mb-2">20:00</p> -->
-        <h2 id="break" class="font-bold text-sm text-offblack uppercase mt-2"><!-- time until break --></h2>
-        <p id="timer" class="tracking-tight text-6xl text-blue mb-2"><!-- alarm and 20 seconds timer --></p>
-        <button id="pauseButton">Pause</button>
-        <button id="resumeButton">Start</button>
-        <button id="go-button">Reset</button>
-        <section class="bg-blue py-1">
+        <h2 id="timer-title" class="font-bold text-sm text-textword uppercase mt-2 tracking-wider"></h2>
+        <p id="timer" class="tracking-tight text-6xl text-bluesky mb-2 mt-0"><!-- alarm and 20 seconds timer --></p>
+        <div class="border-t border-[#9ca3af] text-sm flex justify-evenly items-center">
+            <button id="start-btn" class="uppercase py-1.5 my-1.5 px-1.5 hover:text-bluesky hover:font-bold disabled:text-bluesky disabled:font-bold" >Start</button>
+            <p>|</p> 
+            <button id="reset-timer-btn" class="uppercase py-1.5 my-1.5 px-1.5 hover:text-bluesky hover:font-bold disabled:text-bluesky disabled:font-bold">Reset</button>
+            <p>|</p>
+            <button id="pause-btn" class="uppercase py-1.5 my-1.5 px-1.5 hover:text-bluesky hover:font-bold disabled:text-bluesky disabled:font-bold ">Pause</button>
+        </div>
+        
+        
+        <section class="bg-bluesky py-1 ">
             <p class="text-offwhite text-20-20-20 font-normal"><span class="font-bold">20-20-20</span> Rule</p>
         </section>
-        <section class="px-2.5 text-left text-13px my-2">
+        <section class="px-2.5 text-center text-13px my-2 text-textword ">
             <p>Take a <span class="font-bold">20-second</span> break every <span class="font-bold">20 minutes</span> to look at an object <span class="font-bold">20 feet away.</span></p>
         </section>
         <section class="border-t border-[#9ca3af]">
-            <p id="openNewTab" class="font-bold cursor-pointer text-darkblue text-xs mt-1 mb-2">Learn more about eye health</p>
+            <p id="openNewTab" class="font-bold cursor-pointer text-darkblue text-xs mt-1 mb-2">View our eye exercises</p>
         </section>
     </div>
     <div id="backpage" class="hidden">
         <form class="mt-6 flex flex-col justify-center items-center mx-2">
             <div>
-                <label for="duration-select" class="font-semibold text-[13px]">Take break every</label>
-                <select name="times" id="duration-select" class="border border-solid border-black mb-[15px]">
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="15">15</option>
-                    <option value="20" selected>20</option>
-                    <option value="25">25</option>
-                    <option value="30">30</option>
+                <label for="duration-select" class="font-semibold text-[14px]">Take break every</label>
+                <select name="times" id="duration-select" class="border border-solid border-black mb-[15px] text-xs font-semibold">
+                    <option class="text-xs font-semibold" value="1">1</option>
+                    <option class="text-xs font-semibold" value="5">5</option>
+                    <option class="text-xs font-semibold" value="10">10</option>
+                    <option class="text-xs font-semibold" value="15">15</option>
+                    <option class="text-xs font-semibold" value="20" selected>20</option>
+                    <option class="text-xs font-semibold" value="25">25</option>
+                    <option class="text-xs font-semibold" value="30">30</option>
                 </select>
-                <label for="time-options" class="font-semibold text-xxs">Min.</label>
+                <label for="time-options" class="font-semibold text-xs">Min.</label>
             </div>
             <!-- <div>
                 <select id="sound-select">
@@ -73,7 +72,7 @@
                 </select>
                 <audio id="audioPlayer"></audio>
             </div> -->
-            <button class="bg-white border border-solid border-black rounded-md settingsButton mb-3 px-2 font-semibold uppercase ml-[140px] text-xxs leading-3" type="button" id="start-button">ok</button>
+            <button class="bg-white border border-solid border-black rounded-md settingsButton mb-3 px-2 py-0.5	font-semibold uppercase ml-[140px] text-xs leading-3" type="button" id="ok-button">ok</button>
         </form>
     </div>
     
