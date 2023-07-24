@@ -1,208 +1,118 @@
+// Function to update the timer display in the popup
+function updatePopupTimerDisplay(timeInSeconds, timerTitle, timerColor) {
+    const timerDisplay = document.getElementById('timer');
+    const timerTitleDisplay = document.getElementById('timer-title');
+    chrome.storage.local.get(['selectedTime', 'breakDuration'], function (result) {
+        const selectedTime = result.selectedTime
+        const breakDuration = result.breakDuration
 
-function updateTime() {
-    chrome.storage.local.get(["timer", "timeOption", "isRunning", "isBreakRunning", 'breakTimer', 'breakDurationSelect'], (res) => {
-        const timerDisplay = document.getElementById("timer");
-        const timerTitleDisplay = document.getElementById("timer-title");
+        if (selectedTime >= 0) {
+            console.log('selectedtime on')
+        }
 
-        const timeOption = res.timeOption
-        const breakDurationSelect = res.breakDurationSelect
-        // console.log(res.breakTimer, 'res.breakTimer')
-        // console.log(breakDurationSelect, 'breakDurationSelect')
+        if (breakDuration >=0) {
+            console.log('breaktimer on')
+        }
 
 
-        if (timerDisplay && timerTitleDisplay) {
-            
-            const minutes = `${timeOption - Math.ceil(res.timer / 60)}`.padStart(2, "0");
-            let seconds = "00";
-            timerDisplay.textContent = `${minutes}:${seconds}`
-            if (res.timer % 60 !== 0) {
-                const minutes = `${timeOption - Math.ceil(res.timer / 60)}`.padStart(2, "0");
-                let seconds = "00";
-                seconds = `${60 - (res.timer % 60)}`.padStart(2, "0");
-                timerTitleDisplay.textContent = "Worktime"; // Set the timer title
-                timerDisplay.textContent = `${minutes}:${seconds}`;
-            }
-            if (res.breakTimer % 60 !== 0) {
-                let minutes = '00';
-                let seconds = `${breakDurationSelect - res.breakTimer}`.padStart(2, "0");
-                timerDisplay.textContent = `${minutes}:${seconds}`;
-                timerTitleDisplay.textContent = "Break Time"; // Set the timer title
-                timerDisplay.style.color = "black"; // Set the color to black
-            } else {
-                timerDisplay.style.removeProperty("color"); // Reset the color property
-                // const minutes = `${timeOption - Math.ceil(res.timer / 60)}`.padStart(2, "0");
-                // let seconds = "00";
-                // timerDisplay.textContent = `${minutes}:${seconds}`;
-            }
+    })
+    if (timerDisplay && timerTitleDisplay) {
+        const minutes = Math.floor(timeInSeconds / 60);
+        const seconds = Math.ceil(timeInSeconds % 60);
+        timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        timerTitleDisplay.textContent = timerTitle;
+
+        if (timerColor) {
+            timerDisplay.style.color = timerColor; // Set the timer color
         } else {
-            console.error("Timer display elements not found");
+            timerDisplay.style.removeProperty('color'); // Reset the timer color
+        }
+    } else {
+        console.error("Timer display elements not found");
+    }
+}
+
+
+// Function to start the timers with the selected time from the dropdown menu
+function startTimers() {
+    const durationSelect = document.getElementById('duration-select');
+    const breakDurationSelect = 20 //document.getElementById('break-duration-select');
+
+    const duration = parseInt(durationSelect.value);
+    // const breakDuration = parseInt(breakDurationSelect.value);
+
+    // Clear the existing local storage
+    // chrome.storage.local.clear();
+
+    chrome.storage.local.set({ isRunning: true })
+
+    // Send a message to the background script to start the timers
+    chrome.runtime.sendMessage({
+        action: 'startTimers',
+        duration: duration,
+        breakDuration: breakDurationSelect, //breakDuration
+    });
+}
+
+// Initialize the dropdowns, timer display, and timer title
+function initializePopup() {
+    const durationSelect = document.getElementById('duration-select');
+    // const breakDurationSelect = document.getElementById('break-duration-select');
+    const timerTitleDisplay = document.getElementById('timer-title');
+
+    // Add event listener to the start button
+    const startButton = document.getElementById('ok-button');
+    startButton.addEventListener('click', startTimers);
+
+    // Update the timer display with the initial value from Chrome storage
+    chrome.storage.local.get(['timerValue', 'timerTitle'], function (result) {
+        const timerValue = result.timerValue || 1200;
+        const timerTitle = result.timerTitle || '';
+        updatePopupTimerDisplay(timerValue, timerTitle);
+    });
+
+    // Update the dropdown menus with the initial selected time and break duration from Chrome storage
+    chrome.storage.local.get('selectedTime', function (result) {
+        const selectedTime = result.selectedTime;
+        if (selectedTime) {
+            durationSelect.value = selectedTime.toString();
         }
     });
-}
 
+    // chrome.storage.local.get('breakDuration', function (result) {
+    //     const breakDuration = result.breakDuration;
+    //     if (breakDuration) {
+    //         breakDurationSelect.value = breakDuration.toString();
+    //     }
+    // });
 
-const okButton = document.getElementById("ok-button");
-okButton.addEventListener("click", () => {
-    chrome.storage.local.clear();
-
-    chrome.runtime.sendMessage({
-        action: 'startTimers' //breakDuration
+    // Update the timer title display from Chrome storage
+    chrome.storage.local.get('timerTitle', function (result) {
+        const timerTitle = result.timerTitle || '';
+        timerTitleDisplay.textContent = timerTitle;
     });
-        const timeOptionSelect = document.getElementById("duration-select");
-        const breakDurationSelect = 21 //document.getElementById('break-duration-select');
-        const selectedTimeOption = timeOptionSelect.value;
-
-        // console.log(selectedTimeOption, 'selectedTimeOption'),
-            chrome.storage.local.set(
-                {
-                    breakDurationSelect: breakDurationSelect,
-                    timeOption: selectedTimeOption,
-                    timer: 0,
-                    breakTimer: 0,
-                    isRunning: true, // Start the timer
-                    isBreakRunning: false,
-                    isStartButtonDisabled: true,
-                    isPauseButtonDisabled: false,
-                    
-                },
-                () => {
-                    startBtn.disabled = true;
-                    pauseBtn.disabled = false;
-                }
-            );
-});
-
-
-function initializePopup() {
-    updateTime()
-    setInterval(updateTime, 1000)
 }
-
-// Retrieve the selected time option from Chrome storage and set it in the dropdown menu
-chrome.storage.local.get(["timeOption"], (res) => {
-    const timeOptionSelect = document.getElementById("duration-select");
-    timeOptionSelect.value = res.timeOption;
-});
 
 // Call the initializePopup function when the popup is opened
 document.addEventListener('DOMContentLoaded', initializePopup);
 
-
-const startBtn = document.getElementById("start-btn");
-const pauseBtn = document.getElementById("pause-btn");
-
-startBtn.addEventListener("click", () => {
-    chrome.runtime.sendMessage({
-        action: 'startTimers' //start
-    });
-    chrome.storage.local.get(["isRunning", 'isBreakRunning', "timer", 'breakTimer'], (res) => {
-        const timeOption = document.getElementById("duration-select").value;
-        const breakDurationSelect = 21 
-
-        if (res.timer % 60 !== 0) {
-            chrome.storage.local.set(
-                {
-                    isRunning: true,
-                    isBreakRunning: false,
-                    isStartButtonDisabled: true,
-                    isPauseButtonDisabled: false,
-                },
-                () => {
-                    startBtn.disabled = true;
-                    pauseBtn.disabled = false;
-                })
-        }
-        else if (res.breakTimer % 60 !== 0) {
-            chrome.runtime.sendMessage({
-                action: 'breakTimers' //breakDuration
-            });
-            chrome.storage.local.set(
-                {
-                    isRunning: false,
-                    isBreakRunning: false,
-                    isStartButtonDisabled: true,
-                    isPauseButtonDisabled: false,
-                },
-                    () => {
-                startBtn.disabled = true;
-                pauseBtn.disabled = false;
-            })
-        }
-        else {
-            chrome.storage.local.set(
-                {
-                    isRunning: true,
-                    timeOption: timeOption,
-                    isBreakRunning: false,
-                    breakTimer: 0,
-                    breakDurationSelect: breakDurationSelect,
-                    isStartButtonDisabled: true,
-                    isPauseButtonDisabled: false,
-
-                },
-                () => {
-                    startBtn.disabled = true;
-                    pauseBtn.disabled = false;
-                }
-            );
-        }
-
-
-    });
+// Listen for changes in Chrome storage and update the timer display accordingly
+chrome.storage.onChanged.addListener(function (changes) {
+    if (changes.timerValue || changes.timerTitle || changes.timerColor) {
+        chrome.storage.local.get(['timerValue', 'timerTitle', 'timerColor'], function (result) {
+            const timerValue = result.timerValue || 0;
+            const timerTitle = result.timerTitle || '';
+            const timerColor = result.timerColor;
+            updatePopupTimerDisplay(timerValue, timerTitle, timerColor);
+        });
+    }
 });
 
-pauseBtn.addEventListener("click", () => {
-    chrome.storage.local.set(
-        {
-            isRunning: false,
-            isBreakRunning: true,
-            isStartButtonDisabled: false,
-            isPauseButtonDisabled: true,
-        },
-        () => {
-            startBtn.disabled = false;
-            pauseBtn.disabled = true;
-        }
-    );
-});
+// const closePopUp = document.getElementById('closeMenu')
 
-const resetTimerBtn = document.getElementById("reset-timer-btn");
-resetTimerBtn.addEventListener("click", () => {
-    chrome.storage.local.get(["isStartButtonDisabled", "isPauseButtonDisabled"], (res) => {
-
-        const isStartButtonDisabled = res.isStartButtonDisabled;
-        const isPauseButtonDisabled = res.isPauseButtonDisabled;
-        console.log(isStartButtonDisabled, 'isStartButtonDisabled')
-        console.log(isPauseButtonDisabled, 'isPauseButtonDisabled')
-
-        // Updating the button states on the page
-        // startBtn.disabled = isStartButtonDisabled;
-        // pauseBtn.disabled = isPauseButtonDisabled;
-        chrome.storage.local.set(
-            {
-                timer: 0,
-                breakTimer: 0,
-                isRunning: false,
-                isBreakRunning: true,
-                isStartButtonDisabled: false,
-                isPauseButtonDisabled: true,
-            },
-            () => {
-                startBtn.disabled = false;
-                pauseBtn.disabled = true;
-            }
-        );
-    });
-});
-
-
-
-
-
-const closePopUp = document.getElementById('closeMenu')
-closePopUp.addEventListener('click', () => {
-    window.close();
-})
+// closePopUp.addEventListener('click', () => {
+//     window.close();
+// })
 
 const settingsButton = document.querySelectorAll('.settingsButton')
 const frontpage = document.getElementById('frontpage')
@@ -232,14 +142,37 @@ openNewTab.addEventListener("click", () => {
 });
 
 
-// Retrieving the stored values
-chrome.storage.local.get(["isStartButtonDisabled", "isPauseButtonDisabled"], (res) => {
-    const isStartButtonDisabled = res.isStartButtonDisabled;
-    const isPauseButtonDisabled = res.isPauseButtonDisabled;
-    console.log(isStartButtonDisabled, 'isStartButtonDisabled')
-    console.log(isPauseButtonDisabled, 'isPauseButtonDisabled')
 
-    // Updating the button states on the page
-    startBtn.disabled = isStartButtonDisabled;
-    pauseBtn.disabled = isPauseButtonDisabled;
-});
+
+// Add event listener for the "Go" button
+const resetBtn = document.getElementById('reset-btn');
+resetBtn.addEventListener('click', resetTimers);
+
+// Add event listener for the "Go" button
+const pauseBtn = document.getElementById('pause-btn');
+pauseBtn.addEventListener('click', pauseTimers);
+
+// Add event listener for the "Go" button
+const startBtn = document.getElementById('start-btn');
+startBtn.addEventListener('click', resumeTimers);
+
+function pauseTimers() {
+    console.log('Pause button clicked');
+    // Send a message to the background script to pause the timers
+    chrome.runtime.sendMessage({ action: 'pauseTimers' });
+}
+
+function resumeTimers() {
+    console.log('Resume button clicked');
+    chrome.runtime.sendMessage({ action: 'resumeTimers' });
+    //     }
+    // });
+}
+
+function resetTimers() {
+    chrome.storage.local.clear()
+    console.log('Reset button clicked');
+    chrome.runtime.sendMessage({ action: 'resetTimers' });
+    //     }
+    // });
+}
