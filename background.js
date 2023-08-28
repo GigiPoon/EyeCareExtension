@@ -1,100 +1,132 @@
-let timerIntervalId = null;
-let isPaused = false;
-let pausedTime = 0;
-let startTime = 0;
+let intervalId;
+let intervalIdOne;
 
-function runTimersBackToBack() {
-    chrome.storage.local.get(['selectedTime', 'breakDuration'], function (result) {
-        const selectedTime = result.selectedTime
-        const breakDuration = result.breakDuration
-        chrome.storage.local.set({ timerTitle: 'Work Timer', timerColor: '#3393EC' });
+function runTimer(timerType) {
+    chrome.storage.local.get(
+        ["timer", "isRunning", "timeOption", "isBreakRunning", "breakTimer", "breakDurationSelect"],
+        (res) => {
+            // chrome.storage.local.set({
+            //     showbreaktimer: 0,
+            //     showmaintimer: 0
+            // })
+            let TrueORFalse, timeinSecondsPasted, selectedTimefromDropDownMenu;
+            if (timerType === 'main') {
+                TrueORFalse = res.isRunning;
+                timeinSecondsPasted = res.timer;
+                selectedTimefromDropDownMenu = res.timeOption;
+                console.log('main')
+            } else if (timerType === 'break') {
+                TrueORFalse = res.isBreakRunning;
+                timeinSecondsPasted = res.breakTimer;
+                selectedTimefromDropDownMenu = res.breakDurationSelect;
+                console.log('break')
+            } else {
+                return; // Invalid timer type, exit the function
+            }
 
-        runTimer(selectedTime)
-            .then(() => {
-                chrome.storage.local.set({ timerTitle: 'Break Timer', timerColor: 'black' });
-                return runTimer(breakDuration);
-            })
-            .then(() => {
-                chrome.storage.local.set({ timerTitle: 'Work Timer', timerColor: null });
-                runTimersBackToBack(selectedTime, breakDuration);
-            });
-    })
+            if (TrueORFalse) {
+                let timer = timeinSecondsPasted + 1;
+                let isRunning = true;
+                console.log(timer, 'timer')
+                if (timerType === 'main' && timer >= 60 * selectedTimefromDropDownMenu) {
+                    // Show a notification when the main timer ends
+                    chrome.notifications.create({
+                        type: 'basic',
+                        title: 'Timer Ended',
+                        message: `Your ${res.timeOption} minute(s) worktime has ended!`,
+                        iconUrl: '../images/icon48.png',
+                    });
+                    startBreakTimer();
+                    timer = 0;
+                    isRunning = false;
+                    chrome.storage.local.set({
+                        showmaintimer: 0
+                    })
+                } else if (timerType === 'break' && timer >= selectedTimefromDropDownMenu) {
+                    // Show a notification when the main timer ends
+                    chrome.notifications.create({
+                        type: 'basic',
+                        title: 'Timer Ended',
+                        message: 'Your break timer has ended!',
+                        iconUrl: '../images/icon48.png', 
+                    });
+                    startNextMainTimer();
+                    timer = 0;
+                    isRunning = false;
+                    chrome.storage.local.set({
+                        showbreaktimer: 0,
+                    })
+                }
+
+                chrome.storage.local.set({
+                    [timerType === 'main' ? 'timer' : 'breakTimer']: timer,
+                    [timerType === 'main' ? 'isRunning' : 'isBreakRunning']: isRunning,
+                });
+            }
+        }
+    );
 }
 
-function runTimer(durationInSeconds) {
-    console.log(durationInSeconds)
-    return new Promise(resolve => {
-        const currentTime = Date.now();
-        if (!isPaused) {
-            startTime = currentTime; // Update the start time only when not paused
-        }
-        timerIntervalId = setInterval(() => {
-            if (!isPaused) {
-                const elapsedTimeInSeconds = (Date.now() - startTime) / 1000;
-                const remainingTimeInSeconds = durationInSeconds - elapsedTimeInSeconds;
-                console.log(remainingTimeInSeconds)
-
-                if (remainingTimeInSeconds >= 0) {
-                    chrome.storage.local.set({ timerValue: remainingTimeInSeconds });
-                } else {
-                    clearInterval(timerIntervalId);
-                    resolve();
-                }
-            }
-        }, 1000);
+function startBreakTimer() {
+    clearInterval(intervalId);
+    intervalId = null;
+    chrome.storage.local.set({
+        timer: 0,
+        isRunning: false,
+        isBreakRunning: true,
+        showbreaktimer: 2
+    }, () => {
+        intervalIdOne = setInterval(() => runTimer('break'), 1000);
     });
 }
 
-let one = null
+function startNextMainTimer() {
+    clearInterval(intervalIdOne);
+    intervalIdOne = null;
+    chrome.storage.local.set({
+        breakTimer: 0,
+        isRunning: true,
+        isBreakRunning: false,
+        showmaintimer: 1
+    }, () => {
+        intervalId = setInterval(() => runTimer('main'), 1000);
+    });
+}
 
+chrome.storage.local.get(
+    ["timer", "isRunning", "timeOption", "isBreakRunning", "breakTimer"],
+    (response) => {
+        const { timer = 0, breakTimer = 0, timeOption = 20, isRunning = false, isBreakRunning = false } = response;
+
+        chrome.storage.local.set({ timer, timeOption, isRunning, breakTimer, isBreakRunning });
+
+        if (isRunning) {
+            runTimer('main');
+        } else if (isBreakRunning) {
+            runTimer('break');
+        }
+    }
+);
+
+// Listen for messages from the popup
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-    if (message.action === 'pauseTimers') {
-        if (!isPaused) {
-                let z = 0
-                console.log('pausedTime')
-                one = setInterval(() => {
-                    z++
-                    console.log(z)
-                }, 1000)
-            isPaused = true;
-            pausedTime = Date.now();
+    if (message.action === 'startTimers') {
+        // Clear the existing interval if it exists
+        if (intervalId || intervalIdOne) {
+            clearInterval(intervalId);
+            clearInterval(intervalIdOne);
         }
-    } else if (message.action === 'resumeTimers') {
-        if (isPaused) {
-            if (one) {
-                clearInterval(one)
-            }
-            isPaused = false;
-            startTime += Date.now() - pausedTime;
+        chrome.storage.local.set({
+            showmaintimer: 1
+        })
+        // Set the interval for the main timer
+        intervalId = setInterval(() => runTimer('main'), 1000);
+    } else if (message.action === 'breakTimers') {
+        // Clear the existing interval if it exists
+        if (intervalId || intervalIdOne) {
+            clearInterval(intervalId);
+            clearInterval(intervalIdOne);
         }
-    } else if (message.action === 'startTimers') {
-        if (timerIntervalId) {
-            clearInterval(timerIntervalId);
-        }
-
-        const selectedTime = message.duration;
-        const breakDuration = message.breakDuration;
-
-        chrome.storage.local.set({ 
-            selectedTime: selectedTime,
-            breakDuration: breakDuration,        
-        });
-
-        runTimersBackToBack(selectedTime, breakDuration);
+        intervalIdOne = setInterval(() => runTimer('break'), 1000);
     }
 });
-// function showAlarmNotification() {
-//     const notificationOptions = {
-//         type: 'basic',
-//         iconUrl: 'images/alarm.jpg',
-//         title: 'Alarm',
-//         message: 'Timer has finished!',
-//     };
-
-//     chrome.notifications.create('', notificationOptions, () => { });
-// }
-
-// function clearAlarm() {
-//     const alarmName = 'rest_eyes';
-//     chrome.alarms.clear(alarmName);
-// }

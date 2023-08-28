@@ -22,6 +22,13 @@ module.exports = {
         'lightgrey': '#787B7D',
         'textword': '#312A2A',
       },
+      screens: {
+        'sm': '700px',
+        // => @media (max-width: 700px) { ... }
+
+        'md': '960px',
+      // => @media (max-width: 960px) { ... }
+      },
     },
   },
   plugins: [],

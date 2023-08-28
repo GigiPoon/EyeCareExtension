@@ -17,10 +17,10 @@
     <section class="bg-lightblue">     
         <div class="flex px-2 pt-1 justify-between mb-2">
             <div class="flex">
-                <img src='../images/cogbig.svg' alt='settings icon' class="settingsButton cursor-pointer pr-1">
-                <p id="settingsButton" class=" settingsButton pr-1.5 font-semibold cursor-pointer text-textword text-xs">Settings</p>
+                <img src='../images/cogbig.svg' alt='settings icon' class="settingsButton cursor-pointer mr-1" tabindex="0">
+                <p id="settingsButton" class=" settingsButton font-semibold cursor-pointer text-textword text-xs" tabindex="0">Settings</p>
             </div>
-            <img class="cursor-pointer" id="closeMenu" src='../images/xc.svg' alt='letter x'>
+            <img class="cursor-pointer" id="closeMenu" tabindex="0" src='../images/xc.svg' alt='letter x'>
         </div>
         <div class="flex px-2 pb-2 pt-1">
             <img src='../images/logobig.svg' alt='eye fresh title and logo'>
@@ -30,11 +30,11 @@
         <h2 id="timer-title" class="font-bold text-sm text-textword uppercase mt-2 tracking-wider"></h2>
         <p id="timer" class="tracking-tight text-6xl text-bluesky mb-2 mt-0"><!-- alarm and 20 seconds timer --></p>
         <div class="border-t border-[#9ca3af] text-sm flex justify-evenly items-center">
-            <button id="start-btn" class="uppercase py-1.5 my-1.5 px-1.5 hover:text-bluesky hover:font-bold disabled:text-bluesky disabled:font-bold" >Start</button>
+            <button id="start-btn" class="uppercase py-1.5 my-1.5 px-1.5 hover:text-bluesky " >Start</button>
             <p>|</p> 
-            <button id="reset-btn" class="uppercase py-1.5 my-1.5 px-1.5 hover:text-bluesky hover:font-bold disabled:text-bluesky disabled:font-bold">Reset</button>
+            <button id="reset-btn" class="uppercase py-1.5 my-1.5 px-1.5 hover:text-bluesky">Reset</button>
             <p>|</p>
-            <button id="pause-btn" class="uppercase py-1.5 my-1.5 px-1.5 hover:text-bluesky hover:font-bold disabled:text-bluesky disabled:font-bold ">Pause</button>
+            <button id="pause-btn" class="uppercase py-1.5 my-1.5 px-1.5 hover:text-bluesky">Pause</button>
         </div>
         
         
@@ -52,7 +52,7 @@
         <form class="mt-6 flex flex-col justify-center items-center mx-2">
             <div>
                 <label for="duration-select" class="font-semibold text-[14px]">Take break every</label>
-                <select name="times" id="duration-select" class="border border-solid border-black mb-[15px] text-xs font-semibold">
+                <select name="times" id="duration-select" class="border border-solid border-black mb-[15px] text-xs font-semibold rounded-md">
                     <option class="text-xs font-semibold" value="1">1</option>
                     <option class="text-xs font-semibold" value="5">5</option>
                     <option class="text-xs font-semibold" value="10">10</option>
@@ -72,7 +72,7 @@
                 </select>
                 <audio id="audioPlayer"></audio>
             </div> -->
-            <button class="bg-white border border-solid border-black rounded-md settingsButton mb-3 px-2 py-0.5	font-semibold uppercase ml-[140px] text-xs leading-3" type="button" id="ok-button">ok</button>
+            <button class="bg-white border border-solid border-black rounded-md settingsButton mb-3 px-2 py-0.5	font-semibold uppercase ml-auto text-xs leading-3" type="button" id="ok-button">ok</button>
         </form>
     </div>
     
